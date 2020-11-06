@@ -8,14 +8,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="css/materialize.min.css" />
   <link rel="stylesheet" href="css/klub-detail.css">
+  <link rel="stylesheet" href="css/pre-loader.css">
   <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#00897B" />
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <meta name="theme-color" content="#f1f3de" />
+  <link href="https:fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="apple-touch-icon" href="/custom_icon.png" />
+  <link rel="preconnect" href="https:crests.football-data.org">
+  <link rel="shortcut icon" href="favicon.ico">
 </head>
 
-<body>
+<body class="orange lighten-4">
   <!-- Navigasi -->
-  <nav class="orange lighten-4" role="navigation">
+  <nav class="red accent-3" role="navigation">
     <div class="nav-wrapper container">
       <a href="#" class="brand-logo" id="logo-container">LS</a>
       <a href="./index.html" class="sidenav-trigger" data-target="nav-mobile">
@@ -27,8 +31,31 @@
   </nav>
   <!-- Akhir Navigasi -->
 
-  <div class="container" id="body-content"></div>
+  <!--  sisipkan circle loading icon sebelum difetch data api -->
+  <div class="preloader-wrapper circle-loader active">
+    <div class="spinner-layer spinner-red-only">
+      <div class="circle-clipper left">
+        <div class="circle"></div>
+      </div>
+      <div class="gap-patch">
+        <div class="circle"></div>
+      </div>
+      <div class="circle-clipper right">
+        <div class="circle"></div>
+      </div>
+    </div>
+  </div>
 
+  <!-- Konten -->
+  <div class="container" id="konten-detail" style="display: none;"></div>
+
+  <!-- bookmark button -->
+  <div class="fixed-action-btn">
+    <a class="waves-effect waves-light btn-small red" id="hapus">
+      <i class="material-icons right">delete</i>
+      Hapus
+    </a>
+  </div>
   <div class="fixed-action-btn">
     <a class="waves-effect waves-light btn-small red" id="bookmark">
       <i class="material-icons right">star</i>
@@ -41,6 +68,8 @@
   <script src="js/idb.js"></script>
   <script src="js/db.js"></script>
   <script src="js/info_request.js"></script>
+  <!-- <script src="js/pre-loader.js"></script> -->
+
 </body>
 
 </html>

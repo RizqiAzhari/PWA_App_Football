@@ -7,9 +7,13 @@
   <meta name="description" content="Aplikasi Informasi Sepak Bola" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="css/materialize.min.css" />
+  <link rel="stylesheet" href="css/pre-loader.css">
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#f1f3de" />
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link href="https:fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="apple-touch-icon" href="/custom_icon.png" />
+  <link rel="preconnect" href="https:crests.football-data.org">
+  <link rel="shortcut icon" href="favicon.ico">
 </head>
 
 <body class="orange lighten-4">
@@ -25,7 +29,23 @@
   </nav>
   <!-- Akhir Navigasi -->
 
-  <div class="container center-align" id="body-content"></div>
+  <!--  sisipkan circle loading icon sebelum difetch data api -->
+  <div class="preloader-wrapper circle-loader active">
+    <div class="spinner-layer spinner-red-only">
+      <div class="circle-clipper left">
+        <div class="circle"></div>
+      </div>
+      <div class="gap-patch">
+        <div class="circle"></div>
+      </div>
+      <div class="circle-clipper right">
+        <div class="circle"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Konten -->
+  <div class="container center-align" id="body-content" style="display: none;"></div>
 
   <script src="js/materialize.min.js"></script>
   <script src="js/nav.js"></script>
@@ -33,7 +53,8 @@
   <script src="js/idb.js"></script>
   <script src="js/db.js"></script>
   <script src="js/home_request.js"></script>
-  <script src="js/delete_request.js"></script>
+  <!-- <script src="js/pre-loader.js"></script> -->
+
 </body>
 
 </html>

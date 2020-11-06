@@ -1,7 +1,11 @@
-var base_url = "https://api.football-data.org/v2/";
+let base_url = "https://api.football-data.org/v2/";
+//menggunakan preloader untuk circle
+let spinner = document.querySelector(".circle-loader");
+//menggunakan div id body-content (index.html)
+let main = document.getElementById("body-content");
 
 // Blok kode yang akan di panggil jika fetch berhasil
-function status(response) {
+const status = (response) => {
   if (response.status !== 200) {
     console.log("Error : " + response.status);
     // Method reject() akan membuat blok catch terpanggil
@@ -13,49 +17,45 @@ function status(response) {
 }
 
 // Blok kode untuk memparsing json menjadi array JavaScript
-function json(response) {
+const json = (response) => {
   return response.json();
 }
 
 // Blok kode untuk meng-handle kesalahan di blok catch
-function error(error) {
+const error = (error) => {
   // Parameter error berasal dari Promise.reject()
   console.log("Error : " + error);
 }
 
 // Blok kode untuk melakukan request data json
-function cariKlub() {
+const cariKlub = () => {
   if ("caches" in window) {
-    caches.match(base_url + "competitions/2014/standings", {
-      headers: {
-        'X-Auth-Token': "94df46eac39942c5850dda8d43c62c2c"
-      }
-    }).then(function (response) {
+    caches.match(base_url + "competitions/2014/standings/").then((response) => {
       if (response) {
-        response.json().then(function (data) {
+        response.json().then((data) => {
           // Menyusun list klasemen tim
-          var clubsHTML = `
-      <table class="responsive-table">
-      <thead>
-        <tr>
-            <th>Pos</th>
-            <th>Nama Klub</th>
-            <th>Main</th>
-            <th>Menang</th>
-            <th>Seri</th>
-            <th>Kalah</th>
-            <th>JG</th>
-            <th>JK</th>
-            <th>SG</th>
-            <th>Poin</th>
-        </tr>
-      </thead>
+          let clubsHTML = `
+          <table class="responsive-table">
+            <thead>
+              <tr>
+                  <th>Pos</th>
+                  <th>Nama Klub</th>
+                  <th>Main</th>
+                  <th>Menang</th>
+                  <th>Seri</th>
+                  <th>Kalah</th>
+                  <th>JG</th>
+                  <th>JK</th>
+                  <th>SG</th>
+                  <th>Poin</th>
+              </tr>
+            </thead>
 
-      <tbody>
-      `;
-          data.standings.forEach(function (standings) {
+            <tbody>
+          `;
+          data.standings.forEach((standings) => {
             if (standings.type == "TOTAL") {
-              standings.table.forEach(function (table) {
+              standings.table.forEach((table) => {
                 clubsHTML += `
             
                 <tr>
@@ -70,56 +70,62 @@ function cariKlub() {
                   <td>${table.goalDifference}</td>
                   <td>${table.points}</td>
                 </tr>
-
-          `;
+                `;
               });
             }
 
           });
           clubsHTML += `
-      </tbody>
-      </table>
-      `;
-          // Sisipkan list klub ke dalam elemen dengan id #content
-          // document.getElementById("klub").innerHTML = clubsHTML;
+            </tbody>
+            </table>
+          `;
+          //atur setting waktu hilangnya preloader dan tampilan dalam waktu 1 second = 1000 milisecond
+          setTimeout(() => {
+            // non aktifkan circle loader
+            spinner.classList.remove("active");
+            // Sisipkan list klub ke dalam elemen
+            document.getElementById("semua_klub").innerHTML = clubsHTML;
+            // tampilan masuk
+            main.style.display = "block";
+          }, 1000);
         });
       }
     })
   }
 
-  fetch(base_url + "competitions/2014/standings", {
+  fetch(base_url + "competitions/2014/standings/", {
     headers: {
       'X-Auth-Token': "94df46eac39942c5850dda8d43c62c2c"
     }
   })
     .then(status)
     .then(json)
-    .then(function (data) {
+    .then((data) => {
       // Objek/array JavaScript dari response.json() masuk lewat data.
 
       // Menyusun list klasemen tim
-      var clubsHTML = `
+      let clubsHTML = `
       <table class="responsive-table">
-      <thead>
-        <tr>
-            <th>Pos</th>
-            <th>Nama Klub</th>
-            <th>Main</th>
-            <th>Menang</th>
-            <th>Seri</th>
-            <th>Kalah</th>
-            <th>JG</th>
-            <th>JK</th>
-            <th>SG</th>
-            <th>Poin</th>
-        </tr>
-      </thead>
+        <thead>
+          <tr>
+              <th>Pos</th>
+              <th>Nama Klub</th>
+              <th>Main</th>
+              <th>Menang</th>
+              <th>Seri</th>
+              <th>Kalah</th>
+              <th>JG</th>
+              <th>JK</th>
+              <th>SG</th>
+              <th>Poin</th>
+          </tr>
+        </thead>
 
-      <tbody>
+        <tbody>
       `;
-      data.standings.forEach(function (standings) {
+      data.standings.forEach((standings) => {
         if (standings.type == "TOTAL") {
-          standings.table.forEach(function (table) {
+          standings.table.forEach((table) => {
             clubsHTML += `
             
                 <tr>
@@ -140,31 +146,95 @@ function cariKlub() {
         }
       });
       clubsHTML += `
-      </tbody>
+        </tbody>
       </table>
       `;
-      // Sisipkan list klub ke dalam elemen dengan id #content
-      document.getElementById("klub").innerHTML = clubsHTML;
+      //atur setting waktu hilangnya preloader dan tampilan dalam waktu 1 second = 1000 milisecond
+      setTimeout(() => {
+        // non aktifkan circle loader
+        spinner.classList.remove("active");
+        // Sisipkan list klub ke dalam elemen
+        document.getElementById("semua_klub").innerHTML = clubsHTML;
+        // tampilan masuk
+        main.style.display = "block";
+      }, 1000);
     })
     .catch(error);
 }
 
-function cariKlubperId() {
-  return new Promise(function (resolve, reject) {
+const cariKlubperId = () => {
+  return new Promise((resolve, reject) => {
     // Ambil nilai query parameter (?id=)
-    var urlParams = new URLSearchParams(window.location.search);
-    var idTeam = urlParams.get("id");
+    let urlParams = new URLSearchParams(window.location.search);
+    let idTeam = urlParams.get("id");
     if ("caches" in window) {
-      caches.match(base_url + "teams/" + idTeam, {
-        headers: {
-          'X-Auth-Token': "94df46eac39942c5850dda8d43c62c2c"
-        }
-      }).then(function (response) {
+      caches.match(base_url + "teams/" + idTeam).then((response) => {
         if (response) {
-          response.json().then(function (data) {
-            // .... kode lain disembunyikan agar lebih ringkas
-
-            //document.getElementById("body-content").innerHTML = clubHTML;
+          response.json().then((data) => {
+            let clubHTML = `
+              <div class="row">
+                <!-- ikon klub -->
+                <div class="col s12 m4 l3 logo-bar">
+                  <img src="${data.crestUrl}" alt="${data.tla}_logo"/>
+                  <h6>${data.tla}</h6>
+                  <h4>${data.name}</h4>
+                  <p>
+                    Warna Kostum: ${data.clubColors} <br>
+                    Stadion: ${data.venue}
+                  <p>
+                </div>
+                <!-- klub detail -->
+                <div class="col s12 m8 l9 skuad-bar">
+                  <table class = "responsive-table">
+                    <thead>
+                      <tr>
+                          <th>Nama</th>
+                          <th>Status</th>
+                          <th>Posisi</th>
+                          <th>Kewarganegaraan</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+            `;
+            data.squad.forEach((pemain) => {
+              if (pemain.position == null) {
+                clubHTML += `
+                
+                  <tr>
+                    <td>${pemain.name}</td>
+                    <td>${pemain.role}</td>
+                    <td>-</td>
+                    <td>${pemain.nationality}</td>
+                  </tr>
+                
+                `;
+              } else {
+                clubHTML += `
+                
+                  <tr>
+                    <td>${pemain.name}</td>
+                    <td>${pemain.role}</td>
+                    <td>${pemain.position}</td>
+                    <td>${pemain.nationality}</td>
+                  </tr>
+                
+                `;
+              }
+            });
+            clubHTML += `
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            `;
+            //atur setting waktu hilangnya preloader dan tampilan dalam waktu 1 second = 1000 milisecond
+            setTimeout(() => {
+              spinner.classList.remove("active");
+              //sisipkan detail klub
+              document.getElementById("konten-detail").innerHTML = clubHTML;
+              //tampilan masuk
+              document.getElementById("konten-detail").style.display = "block";
+            }, 1000);
             // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
             resolve(data);
           });
@@ -179,16 +249,15 @@ function cariKlubperId() {
     })
       .then(status)
       .then(json)
-      .then(function (data) {
-        // ... kode lain disembunyikan agar lebih ringkas 
+      .then((data) => {
         // Objek JavaScript dari response.json() masuk lewat variabel data.
         //console.log(data);
         // Menyusun komponen card artikel secara dinamis
-        var clubHTML = `
+        let clubHTML = `
           <div class="row">
             <!-- ikon klub -->
             <div class="col s12 m4 l3 logo-bar">
-              <img src="${data.crestUrl}" width="70%" height="70%"/>
+              <img src="${data.crestUrl}" alt="${data.tla}_logo"/>
               <h6>${data.tla}</h6>
               <h4>${data.name}</h4>
               <p>
@@ -198,7 +267,7 @@ function cariKlubperId() {
             </div>
             <!-- klub detail -->
             <div class="col s12 m8 l9 skuad-bar">
-              <table class = "centered">
+              <table class = "responsive-table">
                 <thead>
                   <tr>
                       <th>Nama</th>
@@ -207,62 +276,67 @@ function cariKlubperId() {
                       <th>Kewarganegaraan</th>
                   </tr>
                 </thead>
+                <tbody>
         `;
-        data.squad.forEach(function (pemain) {
+        data.squad.forEach((pemain) => {
           if (pemain.position == null) {
             clubHTML += `
-            <tbody>
+            
               <tr>
                 <td>${pemain.name}</td>
                 <td>${pemain.role}</td>
                 <td>-</td>
                 <td>${pemain.nationality}</td>
               </tr>
-            </tbody>
+            
             `;
           } else {
             clubHTML += `
-            <tbody>
+            
               <tr>
                 <td>${pemain.name}</td>
                 <td>${pemain.role}</td>
                 <td>${pemain.position}</td>
                 <td>${pemain.nationality}</td>
               </tr>
-            </tbody>
+            
             `;
           }
         });
         clubHTML += `
+              </tbody>
             </table>
           </div>
         </div>
         `;
-        document.getElementById("body-content").innerHTML = clubHTML;
+        //atur setting waktu hilangnya preloader dan tampilan fetch api dalam waktu 1 second = 1000 milisecond
+        setTimeout(() => {
+          spinner.classList.remove("active");
+          //sisipkan detail klub
+          document.getElementById("konten-detail").innerHTML = clubHTML;
+          //tampilan masuk
+          document.getElementById("konten-detail").style.display = "block";
+        }, 1000);
         // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
         resolve(data);
-      });
+      })
+      .catch(error);
   });
 }
 
-function getKlubBookmark() {
-  getAll().then(function (teams) {
+const getKlubBookmark = () => {
+  getAll().then((teams) => {
     //console.log(clubs);
-    var clubsHTML = `
-      <table class = "highlight">
+    let clubsHTML = `
+      <table class = "responsive-table">
     `;
     // Menyusun list klub yang disimpan secara dinamis
-    teams.forEach(function (team) {
+    teams.forEach((team) => {
       clubsHTML += `
     
       <tr>
         <td><a href="./klub_info.html?id=${team.id}&saved=true" class="red-text text-accent-4" id="${team.id}">${team.name}</a></td>
         <td><i class="material-icons right">archive</i>Terarsip</td>
-        <td>
-          <a class="waves-effect waves-light btn-small red darken-4 btnDelete" id="${team.id}">
-            <i class="material-icons right">highlight_off</i>Hapus
-          </a>
-        </td>
       </tr>
     
     `;
@@ -276,20 +350,18 @@ function getKlubBookmark() {
   });
 }
 
-function getKlubBookmarkperId() {
-  var urlParams = new URLSearchParams(window.location.search);
-  var idParam = urlParams.get("id");
+const getKlubBookmarkperId = () => {
+  let urlParams = new URLSearchParams(window.location.search);
+  let idParam = urlParams.get("id");
 
   getById(parseInt(idParam))
-    .then(function (teams) {
-    //  var clubHTML = "";
-    //console.log(teams);
-    //teams.forEach(function (club) {
-      var clubHTML = `
+    .then((teams) => {
+      //console.log(teams);
+      let clubHTML = `
           <div class="row">
             <!-- ikon klub -->
             <div class="col s12 m4 l3 logo-bar">
-              <img src="${teams.crestUrl}" width="70%" height="70%"/>
+              <img src="${teams.crestUrl}" alt="${teams.tla}_logo"/>
               <h6>${teams.tla}</h6>
               <h4>${teams.name}</h4>
               <p>
@@ -299,7 +371,7 @@ function getKlubBookmarkperId() {
             </div>
             <!-- klub detail -->
             <div class="col s12 m8 l9 skuad-bar">
-              <table class = "centered">
+              <table class = "responsive-table">
                 <thead>
                   <tr>
                       <th>Nama</th>
@@ -308,49 +380,41 @@ function getKlubBookmarkperId() {
                       <th>Kewarganegaraan</th>
                   </tr>
                 </thead>
+                <tbody>
         `;
-      teams.squad.forEach(function (pemain) {
+      teams.squad.forEach((pemain) => {
         if (pemain.position == null) {
           clubHTML += `
-            <tbody>
+            
               <tr>
                 <td>${pemain.name}</td>
                 <td>${pemain.role}</td>
                 <td>-</td>
                 <td>${pemain.nationality}</td>
               </tr>
-            </tbody>
+            
             `;
         } else {
           clubHTML += `
-            <tbody>
+            
               <tr>
                 <td>${pemain.name}</td>
                 <td>${pemain.role}</td>
                 <td>${pemain.position}</td>
                 <td>${pemain.nationality}</td>
               </tr>
-            </tbody>
+            
             `;
         }
       });
       clubHTML += `
+              </tbody>
             </table>
           </div>
         </div>
         `;
-    //});
 
-    // Sisipkan komponen card ke dalam elemen dengan id #content
-    document.getElementById("body-content").innerHTML = clubHTML;
-  });
+      // Sisipkan komponen card ke dalam elemen dengan id #content
+      document.getElementById("konten-detail").innerHTML = clubHTML;
+    });
 }
-
-// function deleteBookmark(){
-//   var urlParams = new URLSearchParams(window.location.search);
-//   var idParam = urlParams.get("id");
-
-//   deleteById(idParam).then(function (club) {
-
-//   });
-// }
