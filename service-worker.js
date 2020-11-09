@@ -28,9 +28,14 @@ workbox.precaching.precacheAndRoute([
   { url: '/app-football-small.png', revision: '1' },
   { url: '/app-football.png', revision: '1' },
   { url: '/kisspng-spain-national-football-team-fifa-world-cup-spain-spain-football-team-5b14fff75eaf03.5747164315281029033878.png', revision: '1' },
-  { url: '/package-lock.json', revision: '1' }
-]);
+  { url: 'https://fonts.googleapis.com/icon?family=Material+Icons', revision: '1' },
+  { url: 'https://fonts.gstatic.com/s/materialicons/v55/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2', revision: '1' }
+], {
+//ignoreURLParametersMatching: [/.*/]  untuk workbox versi 4 keatas
+ignoreUrlParametersMatching: [/.*/]
+});
 
+// menyimpan cache untuk folder pages
 workbox.routing.registerRoute(
   new RegExp('/pages/'),
     workbox.strategies.staleWhileRevalidate({
@@ -38,9 +43,9 @@ workbox.routing.registerRoute(
     })
 );
 
-// Menyimpan cache untuk fetch data api football selama 1 tahun
+// Menyimpan cache untuk fetch data api football
 workbox.routing.registerRoute(
-  new RegExp('https://api.football-data.org/v2/'),
+  /^https:\/\/(api|crest)\.football-data\.org/ ,
   workbox.strategies.staleWhileRevalidate({
     cacheName: 'football-data-api',
     plugins: [
