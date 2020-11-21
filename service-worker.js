@@ -62,7 +62,7 @@ workbox.routing.registerRoute(
 
 // Menyimpan cache dari CSS Materialize
 workbox.routing.registerRoute(
-  new RegExp('https://fonts.googleapis.com/icon?family=Material+Icons'),
+  ({url}) => url.origin === 'https://fonts.googleapis.com/icon?family=Material+Icons',
   workbox.strategies.staleWhileRevalidate({
     cacheName: 'materialize-icons',
     plugins: [
@@ -78,7 +78,7 @@ workbox.routing.registerRoute(
 );
 
 workbox.routing.registerRoute(
-  new RegExp('https://fonts.gstatic.com/s/materialicons/v55/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2'),
+  ({url}) => url.origin === 'https://fonts.gstatic.com/s/materialicons/v55/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2',
   workbox.strategies.staleWhileRevalidate({
     cacheName: 'materialize-icons-dynamic',
     plugins: [

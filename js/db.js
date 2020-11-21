@@ -11,11 +11,11 @@ const bookmarkTerkini = (teams) => {
             let tx = db.transaction("teams", "readwrite");
             let store = tx.objectStore("teams");
             //console.log(teams);
-            store.add(teams);
+            store.put(teams);
             return tx.complete;
         })
         .then( () => {
-            console.log("Klub berhasil di bookmark.");
+            console.log("Klub berhasil di bookmark");
         });
 }
 
@@ -61,7 +61,7 @@ const deleteById = (teams) => {
                 return tx.complete;
                 //return tx.store.delete(id);
             }).then( () => {
-                console.log('Club deleted');
+                console.log('Klub dihapus');
             });
     });
 }

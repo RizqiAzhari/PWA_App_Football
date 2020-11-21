@@ -24,20 +24,23 @@ document.addEventListener("DOMContentLoaded", function () {
   if (isFromSaved) {
     // hilangkan btn bookmark
     btnBookmark.style.display = 'none';
-    // btnHapus.style.display = 'block';
 
     // ambil artikel lalu tampilkan
     getKlubBookmarkperId();
   } else {
     // hilangkan btn hapus
-    // btnBookmark.style.display = 'block';
     btnHapus.style.display = 'none';
 
     // cari klub lain
     item;
   }
+
   btnBookmark.onclick = function () {
-    console.log("Tombol FAB di klik.");
+    //console.log dengan toast background merah dan tulisan lime
+    M.toast({
+      html: 'Detail Klub di bookmark. Cek di bagian menu favorit.',
+      classes: 'red darken-4 lime-text text-accent-2'
+    });
     item.then(function (teams) {
       bookmarkTerkini(teams);
       // munculkan btnHapus
@@ -46,11 +49,15 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     
   };
+
   btnHapus.onclick = function () {
-    console.log("Tombol DELETE di klik.");
+    //console.log dengan toast background merah dan tulisan lime
+    M.toast({
+      html: 'Detail Klub di hapus',
+      classes: 'red darken-4 lime-text text-accent-2'
+    });
     item.then(function (teams) {
       deleteById(teams);
-      //isFromSaved = false;
       //munculkan btnBookmark
       btnBookmark.style.display = 'block';
       btnHapus.style.display = 'none';
